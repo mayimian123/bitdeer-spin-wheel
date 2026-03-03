@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Bitdeer AI Spin & Win</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="page-bg"></div>
+  <div class="tech-grid"></div>
+  <div class="scanline"></div>
+
+  <main id="app" class="app" aria-live="polite">
+    <header class="top-bar">
+      <button id="logoTrigger" class="logo-btn" type="button" aria-label="Bitdeer logo">
+        <img src="./素材/logo/bitdeerlogo.svg" alt="Bitdeer AI logo">
+      </button>
+      <h1 class="title">Spin &amp; Win</h1>
+    </header>
+
+    <section class="wheel-stage">
+      <div class="pointer" aria-hidden="true"></div>
+      <div class="wheel-shell">
+        <div id="wheelWrap" class="wheel-wrap">
+          <svg id="wheelSvg" class="wheel-svg" viewBox="0 0 1000 1000" role="img" aria-label="Lucky draw wheel"></svg>
+        </div>
+        <div class="wheel-center">
+          <img src="./素材/logo/bitdeerlogo2.png" alt="Bitdeer AI">
+        </div>
+      </div>
+    </section>
+
+    <img id="lucaCorner" class="luca-corner sway-x" src="./素材/luca/站立.png" alt="Luca mascot">
+  </main>
+
+  <section id="resultModal" class="modal hidden" aria-hidden="true">
+    <div id="modalCard" class="modal-card">
+      <div id="celebrateBurst" class="celebrate-burst" aria-hidden="true"></div>
+      <h2 class="modal-title">Congratulations</h2>
+      <p id="resultText" class="result-text">First Prize</p>
+      <img id="lucaCelebrate" class="luca-celebrate sway-y" src="./素材/luca/庆祝.png" alt="Luca celebration">
+      <button id="closeModalBtn" class="close-btn" type="button">Close</button>
+    </div>
+  </section>
+
+  <section id="settingsPanel" class="settings hidden" aria-hidden="true">
+    <div class="settings-card">
+      <h3>Draw Weights</h3>
+      <label>First Prize (%)
+        <input id="weightFirst" type="number" min="0" max="100" step="1" value="20">
+      </label>
+      <label>Second Prize (%)
+        <input id="weightSecond" type="number" min="0" max="100" step="1" value="30">
+      </label>
+      <label>Third Prize (%)
+        <input id="weightThird" type="number" min="0" max="100" step="1" value="50">
+      </label>
+      <p id="settingsError" class="settings-error"></p>
+      <div class="settings-actions">
+        <button id="saveSettingsBtn" class="panel-btn" type="button">Save</button>
+        <button id="closeSettingsBtn" class="panel-btn ghost" type="button">Cancel</button>
+      </div>
+    </div>
+  </section>
+
+  <script src="./app.js"></script>
+</body>
+</html>
