@@ -7,7 +7,7 @@ const resultText = document.getElementById("resultText");
 const celebrateBurst = document.getElementById("celebrateBurst");
 const closeModalBtn = document.getElementById("closeModalBtn");
 const settingsPanel = document.getElementById("settingsPanel");
-const logoTrigger = document.getElementById("logoTrigger");
+const settingsTrigger = document.getElementById("settingsTrigger");
 const saveSettingsBtn = document.getElementById("saveSettingsBtn");
 const closeSettingsBtn = document.getElementById("closeSettingsBtn");
 const settingsError = document.getElementById("settingsError");
@@ -46,7 +46,6 @@ const lucaByState = {
 const state = {
   spinning: false,
   currentAngle: 0,
-  logoTapTimes: [],
   weights: { first: 20, second: 30, third: 50 }
 };
 
@@ -206,8 +205,8 @@ function spinOnce() {
 function onGlobalTap(event) {
   const inModal = Boolean(event.target.closest(".modal-card"));
   const inSettings = Boolean(event.target.closest(".settings-card"));
-  const inLogo = Boolean(event.target.closest(".logo-btn"));
-  if (inModal || inSettings || inLogo) return;
+  const inSettingsBtn = Boolean(event.target.closest(".settings-trigger"));
+  if (inModal || inSettings || inSettingsBtn) return;
   spinOnce();
 }
 
@@ -313,25 +312,13 @@ function toggleSettings(show) {
   settingsPanel.setAttribute("aria-hidden", "true");
 }
 
-function registerLogoTap() {
-  const now = Date.now();
-  state.logoTapTimes = state.logoTapTimes.filter((t) => now - t < 900);
-  state.logoTapTimes.push(now);
-  if (state.logoTapTimes.length >= 3) {
-    state.logoTapTimes = [];
-    if (settingsPanel.classList.contains("hidden")) {
-      toggleSettings(true);
-    } else {
-      toggleSettings(false);
-    }
-  }
-}
-
 buildWheel();
 setLucaState("idle");
 
 document.addEventListener("click", onGlobalTap);
 closeModalBtn.addEventListener("click", hideResult);
-logoTrigger.addEventListener("click", registerLogoTap);
+settingsTrigger.addEventListener("click", function () {
+  toggleSettings(settingsPanel.classList.contains("hidden"));
+});
 saveSettingsBtn.addEventListener("click", trySaveWeights);
 closeSettingsBtn.addEventListener("click", () => toggleSettings(false));
