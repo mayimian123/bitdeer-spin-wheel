@@ -56,20 +56,25 @@ function getAudioCtx() {
   if (!sharedAudioCtx || sharedAudioCtx.state === "closed") {
     sharedAudioCtx = new Ctor();
   }
-  if (sharedAudioCtx.state === "suspended") {
-    sharedAudioCtx.resume();
-  }
   return sharedAudioCtx;
 }
 
-document.addEventListener("touchstart", function unlockAudio() {
-  getAudioCtx();
-  document.removeEventListener("touchstart", unlockAudio);
-}, { once: true });
-document.addEventListener("click", function unlockAudioClick() {
-  getAudioCtx();
-  document.removeEventListener("click", unlockAudioClick);
-}, { once: true });
+function unlockAudio() {
+  var ac = getAudioCtx();
+  if (!ac) return;
+  if (ac.state === "suspended") {
+    ac.resume();
+  }
+  var buf = ac.createBuffer(1, 1, ac.sampleRate);
+  var src = ac.createBufferSource();
+  src.buffer = buf;
+  src.connect(ac.destination);
+  src.start(0);
+}
+
+document.addEventListener("touchstart", unlockAudio);
+document.addEventListener("touchend", unlockAudio);
+document.addEventListener("click", unlockAudio);
 
 function polarToCartesian(cx, cy, r, degree) {
   const rad = (degree * Math.PI) / 180;
@@ -257,6 +262,9 @@ function startCelebrationFx() {
 function playWinSound() {
   var ac = getAudioCtx();
   if (!ac) return;
+  if (ac.state === "suspended") {
+    ac.resume();
+  }
   var now = ac.currentTime;
   var notes = [523.25, 659.25, 783.99, 1046.5];
   notes.forEach(function (freq, i) {
