@@ -49,6 +49,28 @@ const state = {
   weights: { first: 20, second: 30, third: 50 }
 };
 
+var sharedAudioCtx = null;
+function getAudioCtx() {
+  var Ctor = window.AudioContext || window.webkitAudioContext;
+  if (!Ctor) return null;
+  if (!sharedAudioCtx || sharedAudioCtx.state === "closed") {
+    sharedAudioCtx = new Ctor();
+  }
+  if (sharedAudioCtx.state === "suspended") {
+    sharedAudioCtx.resume();
+  }
+  return sharedAudioCtx;
+}
+
+document.addEventListener("touchstart", function unlockAudio() {
+  getAudioCtx();
+  document.removeEventListener("touchstart", unlockAudio);
+}, { once: true });
+document.addEventListener("click", function unlockAudioClick() {
+  getAudioCtx();
+  document.removeEventListener("click", unlockAudioClick);
+}, { once: true });
+
 function polarToCartesian(cx, cy, r, degree) {
   const rad = (degree * Math.PI) / 180;
   return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
@@ -233,14 +255,13 @@ function startCelebrationFx() {
 }
 
 function playWinSound() {
-  const AudioCtx = window.AudioContext || window.webkitAudioContext;
-  if (!AudioCtx) return;
-  const ac = new AudioCtx();
-  const now = ac.currentTime;
-  const notes = [523.25, 659.25, 783.99, 1046.5];
-  notes.forEach((freq, i) => {
-    const osc = ac.createOscillator();
-    const gain = ac.createGain();
+  var ac = getAudioCtx();
+  if (!ac) return;
+  var now = ac.currentTime;
+  var notes = [523.25, 659.25, 783.99, 1046.5];
+  notes.forEach(function (freq, i) {
+    var osc = ac.createOscillator();
+    var gain = ac.createGain();
     osc.type = "square";
     osc.frequency.setValueAtTime(freq, now + i * 0.1);
     gain.gain.setValueAtTime(0.0001, now + i * 0.1);
@@ -251,8 +272,8 @@ function playWinSound() {
     osc.stop(now + i * 0.1 + 0.19);
   });
 
-  const burst = ac.createOscillator();
-  const burstGain = ac.createGain();
+  var burst = ac.createOscillator();
+  var burstGain = ac.createGain();
   burst.type = "triangle";
   burst.frequency.setValueAtTime(1320, now + 0.42);
   burst.frequency.exponentialRampToValueAtTime(680, now + 0.7);
@@ -262,8 +283,6 @@ function playWinSound() {
   burst.connect(burstGain).connect(ac.destination);
   burst.start(now + 0.42);
   burst.stop(now + 0.72);
-
-  setTimeout(() => ac.close(), 1200);
 }
 
 function updateWeightInputs() {
