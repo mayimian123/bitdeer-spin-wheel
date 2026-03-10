@@ -249,8 +249,12 @@ body {
   bottom: 0;
   left: 0;
   z-index: 30;
-  display: grid;
-  place-items: center;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
   background: rgba(0, 7, 4, 0.78);
   -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
@@ -266,16 +270,21 @@ body {
   width: min(84vw, 680px);
   min-height: 56vh;
   min-height: 56dvh;
-  max-height: 92vh;
+  max-height: 88vh;
   border-radius: 26px;
   border: 2px solid rgba(0, 216, 158, 0.55);
   background:
     radial-gradient(circle at 50% 32%, rgba(0, 237, 124, 0.2), rgba(0, 0, 0, 0.95) 70%),
     linear-gradient(145deg, rgba(6, 30, 21, 0.92), rgba(2, 11, 8, 0.92));
   box-shadow: 0 0 45px rgba(0, 216, 158, 0.28), inset 0 0 18px rgba(0, 216, 158, 0.2);
-  display: grid;
-  justify-items: center;
-  align-content: center;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
   gap: 20px;
   padding: 30px 20px 24px;
   text-align: center;
@@ -309,6 +318,8 @@ body {
 
 .luca-celebrate {
   width: min(52vw, 360px);
+  max-height: 38vh;
+  object-fit: contain;
   margin-top: -4px;
   margin-bottom: 4px;
 }
@@ -489,8 +500,10 @@ body {
 
   .logo-btn {
     width: 258px;
-    left: 30px;
+    left: 50%;
     top: 30px;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
   }
 
   .pointer {
@@ -508,12 +521,14 @@ body {
   }
 
   .luca-celebrate {
-    width: min(42vw, 280px);
+    width: min(40vw, 260px);
+    max-height: 32vh;
   }
 
   .modal-card {
-    min-height: 50vh;
-    gap: 16px;
+    min-height: auto;
+    max-height: 84vh;
+    gap: 14px;
     padding: 24px 16px 20px;
   }
 }
